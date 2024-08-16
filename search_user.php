@@ -250,7 +250,7 @@ $conn->close();
                         <td><?php echo htmlspecialchars($user['Ejecutivo']); ?></td>
                         <td>
                             <a href="edit_user.php?edit_user=<?php echo htmlspecialchars($user['Usuario']); ?>">Editar</a> |
-                            <a href="?delete_user=<?php echo htmlspecialchars($user['Usuario']); ?>" onclick="return confirmDelete('<?php echo htmlspecialchars($user['Usuario']); ?>')">Eliminar</a>
+                            <a href="?delete_user=<?php echo htmlspecialchars($user['Usuario']); ?>" onclick="return confirm('<?php echo htmlspecialchars($user['Usuario']); ?>')">Eliminar</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -280,7 +280,7 @@ $conn->close();
         <?php endif; ?>
     });
 
-    function confirmDelete(user) {
+    function confirm() {
         return Swal.fire({
             title: '¿Estás seguro?',
             text: "¡No podrás recuperar este usuario!",
@@ -292,7 +292,7 @@ $conn->close();
             cancelButtonText: 'Cancelar'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = "?delete_user=" + user;
+                window.location.href = "?search_user=" + user;
             }
         });
         return false; // Prevent default link behavior

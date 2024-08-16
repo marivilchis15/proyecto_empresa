@@ -101,11 +101,15 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tricxa by Narro - Crear Usuario</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Crear Usuario</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
-        /* Custom styles for the page */
+        <style>
         body {
             background-color: #f5f7fa;
             font-family: Arial, sans-serif;
@@ -117,15 +121,6 @@ $conn->close();
         .navbar-brand img {
             height: 40px;
         }
-        .content {
-            padding: 20px;
-            background-color: #f0f4fb;
-            text-align: center;
-            min-height: 300px;
-        }
-        .content h1 {
-            color: #007bff;
-        }
         .container {
             width: 80%;
             max-width: 800px;
@@ -134,6 +129,19 @@ $conn->close();
             padding: 20px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
+        }
+        .container h1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+        .container .btn-group {
+            display: flex;
+        }
+        .container .btn-group .btn {
+            margin-left: 10px;
         }
         label {
             margin: 10px 0 5px;
@@ -167,11 +175,39 @@ $conn->close();
         button:hover {
             background-color: #0056b3;
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table th, table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        table th {
+            background-color: #f2f2f2;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .btn-rojo:hover {
+            background-color: red;
+            color: white;
+            align-items: center;
+        }
+        .btn-verde:hover {
+            background-color: green;
+            color: white;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
-
-    <nav class="navbar navbar-expand-lg navbar-light">
+<nav class="navbar navbar-expand-lg navbar-light">
         <a class="navbar-brand" href="#">
             <img src="logo.png" alt="Tricxa Logo">
         </a>
@@ -233,60 +269,78 @@ $conn->close();
             </ul>
         </div>
     </nav>
+    <div class="container">
+        <h1>Crear Nuevo Usuario</h1>
+        <form method="POST" action="">
+            <label for="usuario">Usuario:</label>
+            <input type="text" id="usuario" name="usuario" required>
 
-    <div class="content">
-        <h1>Crear Usuario</h1>
-        <div class="container">
-            <form method="post" action="">
-                <label for="usuario">Usuario:</label>
-                <input type="text" id="usuario" name="usuario" required>
+            <label for="contrasena">Contraseña:</label>
+            <input type="password" id="contrasena" name="contrasena" required>
 
-                <label for="contrasena">Contraseña:</label>
-                <input type="password" id="contrasena" name="contrasena" required>
+            <label for="correo">Correo Electrónico:</label>
+            <input type="text" id="correo" name="correo" required>
 
-                <label for="correo">Correo Electrónico:</label>
-                <input type="text" id="correo" name="correo" required>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
 
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" required>
+            <label for="apellido_paterno">Apellido Paterno:</label>
+            <input type="text" id="apellido_paterno" name="apellido_paterno" required>
 
-                <label for="apellido_paterno">Apellido Paterno:</label>
-                <input type="text" id="apellido_paterno" name="apellido_paterno" required>
+            <label for="apellido_materno">Apellido Materno:</label>
+            <input type="text" id="apellido_materno" name="apellido_materno" required>
 
-                <label for="apellido_materno">Apellido Materno:</label>
-                <input type="text" id="apellido_materno" name="apellido_materno" required>
+            <label for="nivel_usuario">Nivel de Usuario:</label>
+            <select id="nivel_usuario" name="nivel_usuario">
+                <option value="promotor">Promotor</option>
+                <option value="promotor_pc21">Promotor PC21</option>
+            </select>
 
-                <label for="nivel_usuario">Nivel de Usuario:</label>
-                <select id="nivel_usuario" name="nivel_usuario" required>
-                    <option value="admin">Admin</option>
-                    <option value="user">User</option>
-                </select>
+            <label for="ejecutivo">Ejecutivo:</label>
+            <select id="ejecutivo" name="ejecutivo">
+                <?php foreach ($ejecutivos as $ejecutivo): ?>
+                    <option value="<?php echo htmlspecialchars($ejecutivo); ?>"><?php echo htmlspecialchars($ejecutivo); ?></option>
+                <?php endforeach; ?>
+            </select>
 
-                <label for="ejecutivo">Ejecutivo:</label>
-                <select id="ejecutivo" name="ejecutivo" required>
-                    <?php foreach ($ejecutivos as $ejecutivo) { ?>
-                        <option value="<?php echo $ejecutivo; ?>"><?php echo $ejecutivo; ?></option>
-                    <?php } ?>
-                </select>
-
-                <button type="submit" name="create_user">Crear Usuario</button>
-                <button type="button" class="btn-rojo" onclick="window.location.href='index.php'">CERRAR</button>
-            </form>
-        </div>
+            <button type="submit" name="create_user">Crear Usuario</button>
+        </form>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        <?php if (!empty($alert_message)): ?>
-        Swal.fire({
-            icon: '<?php echo strpos($alert_message, "error") !== false ? "error" : (strpos($alert_message, "success") !== false ? "success" : "warning"); ?>',
-            title: '<?php echo ucfirst(explode(": ", $alert_message)[0]); ?>',
-            text: '<?php echo explode(": ", $alert_message)[1]; ?>',
+        document.addEventListener('DOMContentLoaded', function() {
+            var alertMessage = <?php echo json_encode(isset($alert_message) ? $alert_message : ''); ?>;
+
+            if (alertMessage.startsWith('confirm')) {
+                Swal.fire({
+                    title: 'Usuarios Similares Encontrados',
+                    text: alertMessage.replace('confirm: ', ''),
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, continuar',
+                    cancelButtonText: 'No, cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Envío forzado del formulario si el usuario confirma
+                        document.querySelector('form').submit();
+                    }
+                });
+            } else if (alertMessage.startsWith('success')) {
+                Swal.fire({
+                    title: 'Éxito',
+                    text: alertMessage.replace('success: ', ''),
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                });
+            } else if (alertMessage.startsWith('error')) {
+                Swal.fire({
+                    title: 'Error',
+                    text: alertMessage.replace('error: ', ''),
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
         });
-        <?php endif; ?>
     </script>
 </body>
 </html>

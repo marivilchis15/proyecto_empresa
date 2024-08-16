@@ -12,8 +12,9 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Initialize $editUser
+// Initialize $editUser and $alert_message
 $editUser = null;
+$alert_message = "";
 
 // Handle user update
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['usuario'])) {
@@ -35,9 +36,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['usuario'])) {
     $stmt_update->bind_param("sssssss", $nombre, $apellido_paterno, $apellido_materno, $correo_electronico, $nivel_usuario, $ejecutivo, $usuario);
 
     if ($stmt_update->execute()) {
-        $alert_message = "success: Usuario actualizado exitosamente.";
+        $alert_message = "Usuario actualizado exitosamente.";
     } else {
-        $alert_message = "error: Error al actualizar el usuario: " . $stmt_update->error;
+        $alert_message = "Error al actualizar el usuario: " . $stmt_update->error;
     }
 
     $stmt_update->close();
@@ -96,6 +97,7 @@ $conn->close();
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
+        <style>
         body {
             background-color: #f5f7fa;
             font-family: Arial, sans-serif;
@@ -191,6 +193,7 @@ $conn->close();
             align-items: center;
         }
     </style>
+    </style>
 </head>
 <body>
 
@@ -256,11 +259,9 @@ $conn->close();
             </ul>
         </div>
     </nav>
+
 <div class="container">
-    <h1>
-        Editar Usuario
-    
-    </h1>
+    <h1>Editar Usuario</h1>
     <?php if ($editUser): ?>
         <form method="POST" action="">
             <input type="hidden" name="usuario" value="<?php echo htmlspecialchars($editUser['Usuario']); ?>">
@@ -294,6 +295,16 @@ $conn->close();
     <?php endif; ?>
 </div>
 
+<?php if (!empty($alert_message)): ?>
+<script>
+    Swal.fire({
+        icon: '<?php echo strpos($alert_message, "Error") !== false ? "error" : "success"; ?>',
+        title: '<?php echo $alert_message; ?>',
+        showConfirmButton: true,
+        confirmButtonText: 'Aceptar'
+    });
+</script>
+<?php endif; ?>
+
 </body>
 </html>
-
